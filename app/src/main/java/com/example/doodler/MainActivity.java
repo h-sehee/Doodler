@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
         alphaSeekBar = findViewById(R.id.alphaSeekBar);
         colorCircle = findViewById(R.id.colorCircle);
         strokeCircle = findViewById(R.id.strokeCircle);
+        TextView strokeText = findViewById(R.id.strokeText);
         opacityCircle = findViewById(R.id.opacityCircle);
+        TextView alphaText = findViewById(R.id.alphaText);
 
         colorCircle.updateCircle(50, 255, doodleView.getPaintColor());
         strokeCircle.updateCircle(doodleView.getPaintStrokeWidth(), 255, Color.BLACK);
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onOk(AmbilWarnaDialog dialog, int color) {
                     doodleView.setPaintColor(color);
+                    doodleView.setPreviousColor(color);
                     colorCircle.updateCircle(50, 255, color);
                 }
 
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 if (progress > 0) {
                     doodleView.setStrokeWidth(progress);
                     strokeCircle.updateCircle(doodleView.getPaintStrokeWidth(), 255, Color.BLACK);
+                    strokeText.setText((int)doodleView.getPaintStrokeWidth() + "px");
                 }
             }
 
@@ -96,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 doodleView.setPaintAlpha(progress);
                 opacityCircle.updateCircle(50, doodleView.getPaintAlpha(), Color.BLACK);
+                int percent = (int) ((progress / 255.0) * 100);
+                alphaText.setText(percent + "%");
             }
 
             @Override
@@ -115,17 +123,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button penButton = findViewById(R.id.penButton);
+        ImageButton penButton = findViewById(R.id.penButton);
         penButton.setOnClickListener(v -> {
             isEraser = !isEraser;
-            if (isEraser) {
-                currentColor = doodleView.getPaintColor();
-                doodleView.setPaintColor(Color.WHITE);
-            } else {
-                doodleView.setPaintColor(currentColor);
-            }
+            doodleView.setEraserMode(isEraser);
             strokeSeekBar.setVisibility(View.GONE);
             alphaSeekBar.setVisibility(View.GONE);
+            if (isEraser) {
+                penButton.setImageResource(R.drawable.eraser);
+            } else {
+                penButton.setImageResource(R.drawable.pen);
+            }
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

@@ -11,7 +11,7 @@ public class CustomImageView extends androidx.appcompat.widget.AppCompatImageVie
     private float strokeWidth;
     private int alpha;
 
-    private int color = Color.BLACK;
+    private int color;
 
     public CustomImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -19,7 +19,6 @@ public class CustomImageView extends androidx.appcompat.widget.AppCompatImageVie
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         this.color = Color.BLACK;
-//        paint.setColor(color);
     }
 
     public void updateCircle(float strokeWidth, int alpha, int color) {
