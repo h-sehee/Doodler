@@ -21,8 +21,6 @@ public class DoodleView extends View {
     private Path path;
     private Paint paint;
     private boolean isEraserMode = false;
-    private int previousColor = Color.BLACK;
-    private int previousAlpha = 255;
 
     public DoodleView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -63,10 +61,6 @@ public class DoodleView extends View {
                 path.reset();
                 path.moveTo(x, y);
                 if (isEraserMode) {
-                    if (paint.getColor()!=0 && paint.getAlpha()!= 0) {
-//                        previousColor = paint.getColor();
-//                        previousAlpha = paint.getAlpha();
-                    }
                     if (paint.getXfermode() == null) {
                         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                     }
@@ -74,8 +68,6 @@ public class DoodleView extends View {
                     if (paint.getXfermode() != null) {
                         paint.setXfermode(null);
                     }
-//                    paint.setColor(previousColor);
-//                    paint.setAlpha(previousAlpha);
                 }
                 startX = x;
                 startY = y;
@@ -91,10 +83,6 @@ public class DoodleView extends View {
                     canvas.drawPath(path, paint);
                 }
                 path.reset();
-//                if (!isEraserMode) {
-//                    paint.setColor(previousColor);
-//                    paint.setAlpha(previousAlpha);
-//                }
                 break;
         }
 
@@ -123,15 +111,6 @@ public class DoodleView extends View {
         }
     }
 
-    public void setPreviousColor(int color) {
-        previousColor = color;
-    }
-
-    public void setPreviousAlpha(int alpha) {
-        previousAlpha = alpha;
-    }
-
-
     public int getPaintColor() {
         return paint.getColor();
     }
@@ -142,10 +121,6 @@ public class DoodleView extends View {
 
     public int getPaintAlpha() {
         return Color.alpha(paint.getColor());
-    }
-
-    public int getPreviousAlpha() {
-        return Color.alpha(previousAlpha);
     }
 
     public void setEraserMode(boolean isEraser) {

@@ -106,7 +106,7 @@
         android:id="@+id/strokeSeekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:max="50"
+        android:max="100"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/toolPanel"
         app:layout_constraintStart_toStartOf="parent"

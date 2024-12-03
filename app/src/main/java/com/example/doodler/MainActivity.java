@@ -62,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onOk(AmbilWarnaDialog dialog, int color) {
                     previousAlpha=doodleView.getPaintAlpha();
                     doodleView.setPaintColor(color);
-                    doodleView.setPreviousColor(color);
                     doodleView.setPaintAlpha(previousAlpha);
-                    doodleView.setPreviousAlpha(previousAlpha);
                     colorCircle.updateCircle(50, 255, color);
                 }
 
@@ -88,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
             params.topMargin = (int) (30 * getResources().getDisplayMetrics().density);
             line.setLayoutParams(params);
             alphaSeekBar.setProgress(doodleView.getPaintAlpha());
-//            alphaSeekBar.setProgress(doodleView.getPreviousAlpha());
-
         });
 
         strokeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -115,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 doodleView.setPaintAlpha(progress);
-                doodleView.setPreviousAlpha(progress);
                 opacityCircle.updateCircle(50, doodleView.getPaintAlpha(), Color.BLACK);
                 int percent = (int) ((progress / 255.0) * 100);
                 alphaText.setText(percent + "%");
