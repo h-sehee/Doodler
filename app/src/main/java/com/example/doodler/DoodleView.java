@@ -38,8 +38,10 @@ public class DoodleView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(mBitmap);
+        if (mBitmap == null) {
+            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            canvas = new Canvas(mBitmap);
+        }
     }
 
     @Override
@@ -50,56 +52,75 @@ public class DoodleView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        final int CLICK_THRESHOLD = 1;
         float x = event.getX();
         float y = event.getY();
+        float startX = 0;
+        float startY = 0;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 path.reset();
                 path.moveTo(x, y);
                 if (isEraserMode) {
-                    if (paint.getColor()!=0) {
-                        previousColor = paint.getColor();
-                        previousAlpha = paint.getAlpha();
+                    if (paint.getColor()!=0 && paint.getAlpha()!= 0) {
+//                        previousColor = paint.getColor();
+//                        previousAlpha = paint.getAlpha();
                     }
-                    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-                    paint.setColor(Color.TRANSPARENT);
+                    if (paint.getXfermode() == null) {
+                        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                    }
                 } else {
-                    paint.setXfermode(null);
-                    paint.setColor(previousColor);
-                    paint.setAlpha(previousAlpha);
+                    if (paint.getXfermode() != null) {
+                        paint.setXfermode(null);
+                    }
+//                    paint.setColor(previousColor);
+//                    paint.setAlpha(previousAlpha);
                 }
-                canvas.drawPoint(x, y, paint);
+                startX = x;
+                startY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
                 path.lineTo(x, y);
                 break;
             case MotionEvent.ACTION_UP:
                 path.lineTo(x, y);
-                canvas.drawPath(path, paint);
-                path.reset();
-                if (!isEraserMode) {
-                    paint.setColor(previousColor);
-                    paint.setAlpha(previousAlpha);
+                if (Math.abs(x - startX) < CLICK_THRESHOLD && Math.abs(y - startY) < CLICK_THRESHOLD) {
+                    canvas.drawPoint(x, y, paint);
+                } else {
+                    canvas.drawPath(path, paint);
                 }
+                path.reset();
+//                if (!isEraserMode) {
+//                    paint.setColor(previousColor);
+//                    paint.setAlpha(previousAlpha);
+//                }
                 break;
         }
+
         this.invalidate();
         return true;
     }
 
 
     public void setPaintColor(int color) {
-        paint.setColor(color);
+        if (this.paint.getColor() != color) {
+            this.paint.setColor(color);
+            invalidate();
+        }
     }
 
     public void setStrokeWidth(float width) {
-        paint.setStrokeWidth(width);
+        if (this.paint.getStrokeWidth() != width) {
+            this.paint.setStrokeWidth(width);
+        }
     }
 
     public void setPaintAlpha(int alpha) {
-        int currentColor = paint.getColor();
-        paint.setColor(Color.argb(alpha, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor)));
+        if (this.paint.getAlpha() != alpha) {
+            int currentColor = paint.getColor();
+            paint.setColor(Color.argb(alpha, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor)));
+        }
     }
 
     public void setPreviousColor(int color) {
@@ -123,8 +144,15 @@ public class DoodleView extends View {
         return Color.alpha(paint.getColor());
     }
 
+    public int getPreviousAlpha() {
+        return Color.alpha(previousAlpha);
+    }
+
     public void setEraserMode(boolean isEraser) {
-        this.isEraserMode = isEraser;
+        if (this.isEraserMode != isEraser) {
+            this.isEraserMode = isEraser;
+            invalidate();
+        }
     }
     public void clear() {
         mBitmap.eraseColor(Color.TRANSPARENT);

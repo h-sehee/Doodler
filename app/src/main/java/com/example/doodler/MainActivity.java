@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private CustomImageView strokeCircle;
     private CustomImageView opacityCircle;
     private boolean isEraser = false;
-    private int currentColor;
+    private int previousAlpha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
             new AmbilWarnaDialog(this, doodleView.getPaintColor(), new AmbilWarnaDialog.OnAmbilWarnaListener() {
                 @Override
                 public void onOk(AmbilWarnaDialog dialog, int color) {
+                    previousAlpha=doodleView.getPaintAlpha();
                     doodleView.setPaintColor(color);
                     doodleView.setPreviousColor(color);
+                    doodleView.setPaintAlpha(previousAlpha);
+                    doodleView.setPreviousAlpha(previousAlpha);
                     colorCircle.updateCircle(50, 255, color);
                 }
 
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             }).show();
         });
 
-        // 굵기 설정
         strokeCircle.setOnClickListener(v -> {
             strokeSeekBar.setVisibility(View.VISIBLE);
             alphaSeekBar.setVisibility(View.GONE);
@@ -80,13 +82,14 @@ public class MainActivity extends AppCompatActivity {
             strokeSeekBar.setProgress((int) doodleView.getPaintStrokeWidth());
         });
 
-        // 투명도 설정
         opacityCircle.setOnClickListener(v -> {
             strokeSeekBar.setVisibility(View.GONE);
             alphaSeekBar.setVisibility(View.VISIBLE);
             params.topMargin = (int) (30 * getResources().getDisplayMetrics().density);
             line.setLayoutParams(params);
             alphaSeekBar.setProgress(doodleView.getPaintAlpha());
+//            alphaSeekBar.setProgress(doodleView.getPreviousAlpha());
+
         });
 
         strokeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
