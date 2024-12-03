@@ -22,6 +22,7 @@ public class DoodleView extends View {
     private Paint paint;
     private boolean isEraserMode = false;
     private int previousColor = Color.BLACK;
+    private int previousAlpha = 255;
 
     public DoodleView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,7 +46,6 @@ public class DoodleView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, 0, 0, null);
         canvas.drawPath(path, paint);
-
     }
 
     @Override
@@ -60,18 +60,19 @@ public class DoodleView extends View {
                 if (isEraserMode) {
                     if (paint.getColor()!=0) {
                         previousColor = paint.getColor();
-
+                        previousAlpha = paint.getAlpha();
                     }
                     paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                     paint.setColor(Color.TRANSPARENT);
                 } else {
-                        paint.setColor(previousColor);
                     paint.setXfermode(null);
+                    paint.setColor(previousColor);
+                    paint.setAlpha(previousAlpha);
                 }
                 canvas.drawPoint(x, y, paint);
                 break;
             case MotionEvent.ACTION_MOVE:
-                    path.lineTo(x, y);
+                path.lineTo(x, y);
                 break;
             case MotionEvent.ACTION_UP:
                 path.lineTo(x, y);
@@ -79,6 +80,7 @@ public class DoodleView extends View {
                 path.reset();
                 if (!isEraserMode) {
                     paint.setColor(previousColor);
+                    paint.setAlpha(previousAlpha);
                 }
                 break;
         }
@@ -102,6 +104,10 @@ public class DoodleView extends View {
 
     public void setPreviousColor(int color) {
         previousColor = color;
+    }
+
+    public void setPreviousAlpha(int alpha) {
+        previousAlpha = alpha;
     }
 
 
