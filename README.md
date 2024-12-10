@@ -20,10 +20,17 @@ To run this app, follow these steps:
    - In Android Studio, click on "Run" (the green triangle) or use the keyboard shortcut `Shift + F10` to build and run the app on either an emulator or a physical device.
 
 ## Features
-- **Drawing Tools:** Pen, Eraser
-- **Customaization Options:** Color Picker, Stroke Width, Opacity
-- **User Interface:** Simple, clean design with easy-to-use controls
-- **Undo/Redo Functionality:** Users can undo and redo their drawing actions. The `undo` and `redo` buttons allow users to reverse or reapply their last drawing or eraser actions. The button states dynamically change to disabled (gray) when no further undo or redo actions can be performed.
+- **Drawing Tools:**
+   - Pen
+   - Eraser
+- **Customaization Options:**
+   - Color Picker
+   - Stroke Width
+   - Opacity
+- **User Interface:**
+   - Simple, clean design with easy-to-use controls
+- **Undo/Redo Functionality:**
+   - Users can undo and redo their drawing actions. The `undo` and `redo` buttons allow users to reverse or reapply their last drawing or eraser actions. The button states dynamically change to disabled (gray) when no further undo or redo actions can be performed.
 
 ## Libraries and Resources Used
 - [AmbilWarna](https://github.com/yukuku/ambilwarna) - A color picker library used for selecting colors in the app.
