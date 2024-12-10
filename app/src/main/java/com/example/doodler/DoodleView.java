@@ -61,6 +61,7 @@ public class DoodleView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                saveState();
                 path.reset();
                 path.moveTo(x, y);
                 if (isEraserMode) {
@@ -140,24 +141,22 @@ public class DoodleView extends View {
     private void saveState() {
         Bitmap snapshot = mBitmap.copy(mBitmap.getConfig(), true);
         undoStack.push(snapshot);
+        redoStack.clear();
+        ((MainActivity) getContext()).updateUndoRedoButtons();
     }
 
     public void undo() {
-        if (!undoStack.isEmpty()) {
             redoStack.push(mBitmap.copy(mBitmap.getConfig(), true));
             mBitmap = undoStack.pop();
             canvas = new Canvas(mBitmap);
             invalidate();
-        }
     }
 
     public void redo() {
-        if (!redoStack.isEmpty()) {
             undoStack.push(mBitmap.copy(mBitmap.getConfig(), true));
             mBitmap = redoStack.pop();
             canvas = new Canvas(mBitmap);
             invalidate();
-        }
     }
 
     public boolean canUndo() {

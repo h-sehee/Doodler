@@ -8,9 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <!-- Opacity Circle -->
-
     <LinearLayout
         android:id="@+id/toolPanel"
         android:layout_width="match_parent"
@@ -91,7 +89,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:scaleType="centerInside"
             android:src="@drawable/clear" />
-
     </LinearLayout>
 
     <View
@@ -123,20 +120,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-
-
-    <com.example.doodler.DoodleView
-        android:id="@+id/doodleView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line"
-        app:layout_constraintVertical_bias="0.0" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,6 +134,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
+            android:scaleType="centerInside"
             android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/undo" />
 
@@ -164,8 +148,20 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="32dp"
+            android:scaleType="centerInside"
             android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/redo" />
     </LinearLayout>
 
+    <com.example.doodler.DoodleView
+        android:id="@+id/doodleView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line"
+        app:layout_constraintVertical_bias="0.0"
+        android:elevation="-10dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

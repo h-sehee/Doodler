@@ -2,6 +2,7 @@ package com.example.doodler;
 
 import android.os.Bundle;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         colorCircle.updateCircle(50, 255, doodleView.getPaintColor());
         strokeCircle.updateCircle(doodleView.getPaintStrokeWidth(), 255, Color.BLACK);
         opacityCircle.updateCircle(50, doodleView.getPaintAlpha(), Color.BLACK);
+
         updateUndoRedoButtons();
 
         colorCircle.setOnClickListener(v -> {
@@ -156,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
             updateUndoRedoButtons();
         });
 
-        // Redo 버튼 클릭 시 동작
         redoButton.setOnClickListener(v -> {
             doodleView.redo();
             updateUndoRedoButtons();
@@ -168,9 +169,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        updateUndoRedoButtons();
+
     }
-    private void updateUndoRedoButtons() {
-        undoButton.setEnabled(doodleView.canUndo());
-        redoButton.setEnabled(doodleView.canRedo());
+    public void updateUndoRedoButtons() {
+        if (doodleView != null) {
+            undoButton.setEnabled(doodleView.canUndo());
+            undoButton.setColorFilter(undoButton.isEnabled() ? Color.BLACK : Color.GRAY);
+            redoButton.setEnabled(doodleView.canRedo());
+            redoButton.setColorFilter(redoButton.isEnabled() ? Color.BLACK : Color.GRAY);
+        }
     }
 }
