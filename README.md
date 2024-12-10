@@ -10,10 +10,13 @@ To run this app, follow these steps:
    ```bash
    git clone https://github.com/h-sehee/Doodler.git
 2. **Open the project in Android Studio:**
+
    - If you haven't already, download and install Android Studio from the [official website](https://developer.android.com/studio)
    - Open Android Studio and choose "Open an existing Android Studio project."
    - Navigate to the cloned repository folder and select it.
+
 3. **Build and run the project:**
+
    - In Android Studio, click on "Run" (the green triangle) or use the keyboard shortcut `Shift + F10` to build and run the app on either an emulator or a physical device.
 
 ## Features
