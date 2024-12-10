@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import java.util.Stack;
 
 public class DoodleView extends View {
     private Bitmap mBitmap;
@@ -21,6 +22,8 @@ public class DoodleView extends View {
     private Path path;
     private Paint paint;
     private boolean isEraserMode = false;
+    private Stack<Bitmap> undoStack = new Stack<>();
+    private Stack<Bitmap> redoStack = new Stack<>();
 
     public DoodleView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -132,5 +135,36 @@ public class DoodleView extends View {
     public void clear() {
         mBitmap.eraseColor(Color.TRANSPARENT);
         invalidate();
+    }
+
+    private void saveState() {
+        Bitmap snapshot = mBitmap.copy(mBitmap.getConfig(), true);
+        undoStack.push(snapshot);
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            redoStack.push(mBitmap.copy(mBitmap.getConfig(), true));
+            mBitmap = undoStack.pop();
+            canvas = new Canvas(mBitmap);
+            invalidate();
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            undoStack.push(mBitmap.copy(mBitmap.getConfig(), true));
+            mBitmap = redoStack.pop();
+            canvas = new Canvas(mBitmap);
+            invalidate();
+        }
+    }
+
+    public boolean canUndo() {
+        return !undoStack.isEmpty();
+    }
+
+    public boolean canRedo() {
+        return !redoStack.isEmpty();
     }
 }

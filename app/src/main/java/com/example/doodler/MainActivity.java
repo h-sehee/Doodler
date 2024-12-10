@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private CustomImageView colorCircle;
     private CustomImageView strokeCircle;
     private CustomImageView opacityCircle;
+
+    private ImageButton undoButton;
+    private ImageButton redoButton;
     private boolean isEraser = false;
     private int previousAlpha;
 
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         strokeCircle = findViewById(R.id.strokeCircle);
         TextView strokeText = findViewById(R.id.strokeText);
         opacityCircle = findViewById(R.id.opacityCircle);
+        undoButton = findViewById(R.id.undoButton);
+        redoButton = findViewById(R.id.redoButton);
         TextView alphaText = findViewById(R.id.alphaText);
         View line = findViewById(R.id.line);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) line.getLayoutParams();
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         colorCircle.updateCircle(50, 255, doodleView.getPaintColor());
         strokeCircle.updateCircle(doodleView.getPaintStrokeWidth(), 255, Color.BLACK);
         opacityCircle.updateCircle(50, doodleView.getPaintAlpha(), Color.BLACK);
+        updateUndoRedoButtons();
 
         colorCircle.setOnClickListener(v -> {
             strokeSeekBar.setVisibility(View.GONE);
@@ -145,10 +151,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        undoButton.setOnClickListener(v -> {
+            doodleView.undo();
+            updateUndoRedoButtons();
+        });
+
+        // Redo 버튼 클릭 시 동작
+        redoButton.setOnClickListener(v -> {
+            doodleView.redo();
+            updateUndoRedoButtons();
+        });
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+    private void updateUndoRedoButtons() {
+        undoButton.setEnabled(doodleView.canUndo());
+        redoButton.setEnabled(doodleView.canRedo());
     }
 }
